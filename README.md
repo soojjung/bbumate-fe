@@ -2,82 +2,82 @@
   <img src="/public/thumbnail.png" alt="Thumbnail" width="800">
 </p>
 
-# 쀼메이트 👰🏻🤵🏻
+# BBUmate 👰🏻🤵🏻
 
-“신혼부부 정책 상담 챗봇”는 결혼 후 주거·대출·복지·기업 혜택 지원 등 **각 기관에 흩어진 정보를 RAG 기반으로 통합하여, 사용자의 상황에 맞는 정책을 추천해주는 AI 상담 서비스**입니다.
+"Newlywed Policy Counseling Chatbot" is an **AI counseling service that aggregates policy information scattered across various agencies using RAG, and recommends policies tailored to the user's situation** — covering housing, loans, welfare, and corporate benefits for newlyweds.
 
-## 🚀 배포
+## 🚀 Deployment
 
-- 배포 도메인: https://www.bbumate.com/
+- Live URL: https://www.bbumate.com/
 
-## 🎧 핵심 기능
+## 🎧 Key Features
 
-- 온보딩: 거주 지역, 주거 형태(무주택/전세/월세/자가/기타) 선택 후 맞춤 상담 시작
-- 채팅: 백엔드 API와 통신해 RAG 기반 답변을 수신하고, 자동 스크롤로 최신 메시지를 노출
-- 출처 표시: 백엔드가 제공한 sources를 링크로 화면에 표시
-- 일관된 디자인 토큰: 버튼/아이콘/말풍선 색상을 CSS 변수로 관리
+- **Onboarding**: Select your residential area and housing type (no home / jeonse / monthly rent / homeowner / other) to start a personalized consultation
+- **Chat**: Communicates with the backend API to receive RAG-based responses, with auto-scroll to display the latest messages
+- **Source Display**: Shows sources provided by the backend as clickable links
+- **Consistent Design Tokens**: Manages button/icon/chat bubble colors via CSS variables
 
-## ⚒️ 기술 스택
+## ⚒️ Tech Stack
 
 - React 18 + TypeScript 5
 - Vite 5
 - Tailwind CSS + shadcn/ui
 - ESLint 9
 
-## ✨ 실행 방법
+## ✨ Getting Started
 
-1. 레포지토리 클론
+1. Clone the repository
 
    ```bash
    git clone <YOUR_REPO_URL>
    cd couple-navi
    ```
 
-2. 필수 Node.js 사용
+2. Node.js setup
 
-   프로젝트 루트의 `.nvmrc`에 지정된 Node 22 권장
+   Node 22 is recommended as specified in `.nvmrc` at the project root.
 
-- nvm 사용 시
+- Using nvm
 
   ```bash
-  nvm use        # .nvmrc 기반 Node버전 사용
+  nvm use        # Use the Node version from .nvmrc
   ```
 
-- nvm이 없는 경우
+- Without nvm
 
-  - Node.js 공식 사이트에서 LTS(22) 설치: `https://nodejs.org`
+  - Install LTS (22) from the official Node.js website: `https://nodejs.org`
 
-  - 또는 터미널에서 설치 (macOS Homebrew)
+  - Or install via terminal (macOS Homebrew)
 
     ```bash
     brew install node@22
     brew link node@22 --force
     ```
 
-- nvm 설치할 경우 (macOS 예)
+- Installing nvm (macOS example)
 
   ```bash
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-  # 터미널 재시작 후
+  # Restart your terminal, then:
   nvm install 22
   ```
 
-- 노드 버전 확인
+- Verify Node version
 
   ```bash
   node -v        # 22
   ```
 
-- 의존성 설치 및 실행
+- Install dependencies and run
 
   ```bash
-  npm install    # 의존성 설치
-  npm run dev    # 개발 서버 실행
+  npm install    # Install dependencies
+  npm run dev    # Start the development server
   ```
 
-## 💻 환경변수 설정
+## 💻 Environment Variables
 
-백엔드 API 주소를 바꾸려면(선택): 프로젝트 루트 `.env`에 설정
+To change the backend API URL (optional): set it in `.env` at the project root
 
 ```bash
 VITE_API_BASE=FRONTEND_API_BASE_URL
