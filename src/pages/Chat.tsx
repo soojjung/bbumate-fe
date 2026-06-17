@@ -6,7 +6,24 @@ import { Input } from "@/components/ui/input";
 import { ArrowLeft, Send, Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ChatMessage } from "@/components/ChatMessage";
-import { OnboardingStep } from "@/components/OnboardingStep";
+import { OnboardingStep, REGION_LABELS, SKIPPED } from "@/components/OnboardingStep";
+
+const HOUSING_LABELS: Record<string, string> = {
+  none: "No home",
+  jeonse: "Jeonse",
+  wolse: "Monthly rent",
+  self: "Homeowner",
+  etc: "Other",
+};
+
+// API expects the original Korean labels.
+const HOUSING_API_LABELS: Record<string, string> = {
+  none: "무주택",
+  jeonse: "전세",
+  wolse: "월세",
+  self: "자가",
+  etc: "기타",
+};
 
 interface Message {
   id: string;
@@ -79,43 +96,48 @@ const Chat = () => {
     setUserContext({ region, housing });
     setShowOnboarding(false);
     try {
-      localStorage.setItem("region", normalizeRegion(region));
-      localStorage.setItem("housing_type", normalizeHousingType(housing));
+      // Persist the raw codes (Korean region key, housing code) so the
+      // normalize helpers below produce the right API payload on rehydration.
+      localStorage.setItem("region", region === SKIPPED ? "" : region);
+      localStorage.setItem("housing_type", housing === SKIPPED ? "" : housing);
     } catch {}
 
     const welcomeMessage: Message = {
       id: "1",
       role: "assistant",
-      content: `안녕하세요! 신혼부부 상담 챗봇입니다.\n\n📍 거주 지역: ${region}\n🏠 주거 형태: ${getHousingLabel(
+      content: `Hi! I'm the Newlywed Policy Counseling Chatbot.\n\n📍 Region: ${getRegionLabel(
+        region
+      )}\n🏠 Housing: ${getHousingLabel(
         housing
-      )}\n\n위 정보를 바탕으로 맞춤형 정책을 안내해드리겠습니다. 궁금하신 내용을 편하게 물어보세요.\n\n예시:\n• 신혼부부란?\n• 첫째 아이 출산 시 받을 수 있는 지원금은?\n• 미혼모가 받을 수 있는 지원이 뭐가 있어?\n• 신혼 부부가 받을 수 있는 백화점 혜택은?`,
+      )}\n\nBased on this, I'll guide you to policies that fit your situation. Feel free to ask anything.\n\nExamples:\n• What counts as a newlywed couple?\n• What subsidies are available when a first child is born?\n• What support is available for single mothers?\n• What department-store benefits are available to newlyweds?`,
       timestamp: new Date(),
     };
 
     setMessages([welcomeMessage]);
   };
 
+  // English display label for the housing code (or skip sentinel).
   const getHousingLabel = (value: string) => {
-    const labels: Record<string, string> = {
-      none: "무주택",
-      jeonse: "전세",
-      wolse: "월세",
-      self: "자가",
-      etc: "기타",
-      미응답: "미응답",
-    };
-    return labels[value] || value;
+    if (!value || value === SKIPPED) return "Not specified";
+    return HOUSING_LABELS[value] || value;
   };
 
+  // English display label for the region code (Korean key like "서울") or skip sentinel.
+  const getRegionLabel = (value: string) => {
+    if (!value || value === SKIPPED) return "Not specified";
+    return REGION_LABELS[value] || value;
+  };
+
+  // For API: region is already a Korean string (e.g. "서울"); pass through, empty on skip.
   const normalizeRegion = (value: string | undefined) => {
-    if (!value || value === "미응답") return "";
+    if (!value || value === SKIPPED) return "";
     return value;
   };
 
+  // For API: convert housing code to Korean label, empty on skip.
   const normalizeHousingType = (value: string | undefined) => {
-    const label = getHousingLabel(value || "");
-    if (!label || label === "미응답") return "";
-    return label;
+    if (!value || value === SKIPPED) return "";
+    return HOUSING_API_LABELS[value] || "";
   };
 
   const handleSend = async () => {
@@ -123,16 +145,16 @@ const Chat = () => {
     const trimmed = input.trim();
     if (trimmed.length === 0) {
       toast({
-        title: "질문을 입력해주세요",
-        description: "질문은 비워둘 수 없어요. 최대 500자까지 입력 가능합니다.",
+        title: "Please enter a question",
+        description: "Your question can't be empty. Up to 500 characters.",
         variant: "destructive",
       });
       return;
     }
     if (trimmed.length > 500) {
       toast({
-        title: "질문은 최대 500자까지",
-        description: `${trimmed.length}자 입력됨. 불필요한 내용을 줄여주세요.`,
+        title: "Question is too long",
+        description: `${trimmed.length} characters entered. Please keep it under 500.`,
         variant: "destructive",
       });
       return;
@@ -189,7 +211,7 @@ const Chat = () => {
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: "요청 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
+        content: "Something went wrong while processing your request. Please try again in a moment.",
         format: "text",
         isComplete: true,
         timestamp: new Date(),
@@ -229,10 +251,10 @@ const Chat = () => {
           </div>
           <div className="min-w-0 flex-1">
             <h1 className="font-semibold text-foreground text-sm md:text-base truncate">
-              신혼부부 상담 챗봇
+              Newlywed Policy Counseling Chatbot
             </h1>
             <p className="text-xs text-muted-foreground truncate">
-              {userContext?.region} ·{" "}
+              {getRegionLabel(userContext?.region || "")} ·{" "}
               {getHousingLabel(userContext?.housing || "")}
             </p>
           </div>
@@ -249,7 +271,7 @@ const Chat = () => {
             <div className="w-8 h-8 md:w-9 md:h-9 rounded-full overflow-hidden flex-shrink-0">
               <img
                 src="/bt21.jpg"
-                alt="챗봇 프로필"
+                alt="Chatbot avatar"
                 className="w-full h-full object-cover scale-110"
               />
             </div>
@@ -281,7 +303,7 @@ const Chat = () => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="궁금한 내용을 입력하세요..."
+            placeholder="Type your question..."
             className="flex-1 rounded-full border-border focus:ring-primary focus-visible:ring-1 focus-visible:ring-offset-0 text-base placeholder:text-base sm:text-sm sm:placeholder:text-sm"
             disabled={isLoading}
           />

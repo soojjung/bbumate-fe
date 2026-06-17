@@ -32,7 +32,7 @@ export const ChatMessage = ({ message }: ChatMessageProps) => {
             {message.content}
           </p>
           <p className="text-xs mt-1 text-white/70">
-            {message.timestamp.toLocaleTimeString("ko-KR", {
+            {message.timestamp.toLocaleTimeString("en-US", {
               hour: "2-digit",
               minute: "2-digit",
             })}
@@ -43,7 +43,7 @@ export const ChatMessage = ({ message }: ChatMessageProps) => {
           <div className="w-8 h-8 md:w-9 md:h-9 rounded-full overflow-hidden flex-shrink-0">
             <img
               src="/bt21.jpg"
-              alt="챗봇 프로필"
+              alt="Chatbot avatar"
               className="w-full h-full object-cover scale-110"
             />
           </div>
@@ -71,7 +71,7 @@ export const ChatMessage = ({ message }: ChatMessageProps) => {
               message.sources &&
               message.sources.length > 0 && (
                 <div className="mt-2 border-t border-border pt-2">
-                  <p className="text-xs text-muted-foreground mb-1">출처</p>
+                  <p className="text-xs text-muted-foreground mb-1">Sources</p>
                   <ul className="space-y-1">
                     {message.sources.map((s, idx) => (
                       <li
@@ -97,7 +97,7 @@ export const ChatMessage = ({ message }: ChatMessageProps) => {
               )}
             {message.isComplete && (
               <p className="text-xs mt-1 text-muted-foreground">
-                {message.timestamp.toLocaleTimeString("ko-KR", {
+                {message.timestamp.toLocaleTimeString("en-US", {
                   hour: "2-digit",
                   minute: "2-digit",
                 })}

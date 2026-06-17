@@ -8,7 +8,7 @@
 
 ## 🚀 Deployment
 
-- Live URL: https://www.bbumate.com/
+- Live URL: https://en.bbumate.com/
 
 ## 🎧 Key Features
 
