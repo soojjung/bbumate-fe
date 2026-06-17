@@ -188,6 +188,7 @@ const Chat = () => {
         question: userMessage.content,
         region: regionToSend,
         housing_type: housingToSend,
+        lang: "en",
       });
       const finalContent =
         data.answer_md || data.answer_html || data.answer || "";

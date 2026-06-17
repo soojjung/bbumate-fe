@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://api.bbumate.com/api/$1"
+      "destination": "https://bbumate-api-245585874472.asia-northeast1.run.app/api/$1"
     },
     {
       "source": "/(.*)",

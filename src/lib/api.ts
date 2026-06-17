@@ -2,6 +2,7 @@ export interface QueryRequest {
   question: string;
   region: string | null;
   housing_type: string | null;
+  lang?: "ko" | "en";
 }
 
 export interface QuerySource {
@@ -31,6 +32,7 @@ export async function queryRag(request: QueryRequest): Promise<QueryResponse> {
       question: request.question,
       region: request.region,
       housing_type: request.housing_type,
+      lang: request.lang ?? "ko",
     }),
   });
 
