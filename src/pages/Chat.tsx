@@ -109,7 +109,7 @@ const Chat = () => {
         region
       )}\n🏠 Housing: ${getHousingLabel(
         housing
-      )}\n\nBased on this, I'll guide you to policies that fit your situation. Feel free to ask anything.\n\nExamples:\n• What counts as a newlywed couple?\n• What subsidies are available when a first child is born?\n• What support is available for single mothers?\n• What department-store benefits are available to newlyweds?`,
+      )}\n\nBased on this, I'll guide you to policies that fit your situation. Feel free to ask anything.\n\nExamples:\n• What are the eligibility conditions for the newlywed jeonse loan?\n• What's the interest rate and loan limit for the Beotimmok (버팀목) jeonse loan?\n• What is the income limit for newlywed special supply (특별공급)?\n• What support programs are available for single-parent families?`,
       timestamp: new Date(),
     };
 
